@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart'; // 🎯 تأكد من وجود هذا الاستيراد
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:raghay_app/firebase_options.dart';
@@ -21,14 +22,20 @@ class RaghayApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Raghay',
-      initialRoute: LoginPage.id, // يمكنك تحديثها لاحقاً للفحص التلقائي
+
+      // 🎯 التعديل هنا: فحص حالة الجلسة والإيميل تلقائياً عند فتح التطبيق
+      initialRoute: FirebaseAuth.instance.currentUser == null
+          ? LoginPage.id
+          : (FirebaseAuth.instance.currentUser!.emailVerified
+                ? ChatsHubPage.id
+                : VerifyEmailPage.id),
+
       routes: {
         LoginPage.id: (context) => const LoginPage(),
         RegisterPage.id: (context) => const RegisterPage(),
         VerifyEmailPage.id: (context) => const VerifyEmailPage(),
         ChatsHubPage.id: (context) => const ChatsHubPage(),
-        ChatPage.id: (context) =>
-            ChatPage(), // يتم استقبال الـ chatRoomId هنا عبر الـ Arguments
+        ChatPage.id: (context) => ChatPage(),
       },
     );
   }

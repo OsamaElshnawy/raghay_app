@@ -16,10 +16,8 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController messageController = TextEditingController();
   final ScrollController _controller = ScrollController();
-
-  final CollectionReference messages = FirebaseFirestore.instance.collection(
-    kMessagesCollection,
-  );
+  
+  final CollectionReference messages = FirebaseFirestore.instance.collection(kMessagesCollection);
 
   @override
   void dispose() {
@@ -68,8 +66,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final String myEmail = args['myEmail'] ?? '';
     final String receiverEmail = args['receiverEmail'] ?? '';
     final String receiverName = args['receiverName'] ?? '';
@@ -77,39 +74,27 @@ class _ChatPageState extends State<ChatPage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
         backgroundColor: kPrimaryColor,
         title: Text(receiverName, style: const TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: messages
-            .where(
-              'chatRoomId',
-              isEqualTo: _getChatRoomId(myEmail, receiverEmail),
-            )
+            .where('chatRoomId', isEqualTo: _getChatRoomId(myEmail, receiverEmail))
             .orderBy(kTime, descending: false)
             .snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('Error loading messages.'));
-          }
+          if (snapshot.hasError) return const Center(child: Text('Error loading messages.'));
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: kPrimaryColor),
-            );
+            return const Center(child: CircularProgressIndicator(color: kPrimaryColor));
           }
 
           List<MessageModel> messagesList = [];
           if (snapshot.hasData) {
             for (var doc in snapshot.data!.docs) {
               var data = doc.data() as Map<String, dynamic>;
-              if (data[kTime] != null) {
-                messagesList.add(MessageModel.fromJson(data));
-              }
+              if (data[kTime] != null) messagesList.add(MessageModel.fromJson(data));
             }
           }
 
@@ -119,12 +104,7 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 Expanded(
                   child: messagesList.isEmpty
-                      ? const Center(
-                          child: Text(
-                            'Say Hello! 👋',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        )
+                      ? const Center(child: Text('Say Hello! 👋', style: TextStyle(color: Colors.grey)))
                       : ListView.builder(
                           controller: _controller,
                           itemCount: messagesList.length,
@@ -132,40 +112,21 @@ class _ChatPageState extends State<ChatPage> {
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
                             child: myEmail == messagesList[index].sender
                                 ? ChatBubbleSend(message: messagesList[index])
-                                : ChatBubbleReceive(
-                                    message: messagesList[index],
-                                  ),
+                                : ChatBubbleReceive(message: messagesList[index]),
                           ),
                         ),
                 ),
                 TextField(
                   controller: messageController,
                   textInputAction: TextInputAction.send,
-                  onSubmitted: (val) => _sendMessage(
-                    value: val,
-                    myEmail: myEmail,
-                    receiverEmail: receiverEmail,
-                    senderName: myName,
-                    receiverName: receiverName,
-                  ),
+                  onSubmitted: (val) => _sendMessage(value: val, myEmail: myEmail, receiverEmail: receiverEmail, senderName: myName, receiverName: receiverName),
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.send, color: kPrimaryColor),
-                      onPressed: () => _sendMessage(
-                        value: messageController.text,
-                        myEmail: myEmail,
-                        receiverEmail: receiverEmail,
-                        senderName: myName,
-                        receiverName: receiverName,
-                      ),
+                      onPressed: () => _sendMessage(value: messageController.text, myEmail: myEmail, receiverEmail: receiverEmail, senderName: myName, receiverName: receiverName),
                     ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: kPrimaryColor),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      borderSide: BorderSide(color: kPrimaryColor),
-                    ),
+                    enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: kPrimaryColor)),
+                    focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12)), borderSide: BorderSide(color: kPrimaryColor)),
                   ),
                 ),
               ],

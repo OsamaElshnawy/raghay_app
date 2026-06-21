@@ -78,9 +78,7 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: kPrimaryColor),
               onPressed: () async {
-                String targetEmail = _searchEmailController.text
-                    .trim()
-                    .toLowerCase();
+                String targetEmail = _searchEmailController.text.trim().toLowerCase();
 
                 if (targetEmail.isEmpty) return;
                 if (targetEmail == myEmail.toLowerCase()) {
@@ -95,18 +93,15 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
 
                 if (userDoc.exists) {
                   final userData = userDoc.data() as Map<String, dynamic>;
-                  final String username =
-                      userData['username'] ?? 'Unknown User';
+                  final String username = userData['username'] ?? 'Unknown User';
 
                   _cachedUsernames[targetEmail] = username;
                   _searchEmailController.clear();
-
+                  
                   if (!context.mounted) return;
                   Navigator.pop(context);
 
-                  String senderNameParam = myName.isEmpty
-                      ? myEmail.split('@')[0]
-                      : myName;
+                  String senderNameParam = myName.isEmpty ? myEmail.split('@')[0] : myName;
 
                   Navigator.pushNamed(
                     context,
@@ -120,10 +115,7 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
                   );
                 } else {
                   if (!context.mounted) return;
-                  showSnackBar(
-                    context,
-                    'User not found! Make sure the email is correct.',
-                  );
+                  showSnackBar(context, 'User not found! Make sure the email is correct.');
                 }
               },
               child: const Text('Chat', style: TextStyle(color: Colors.white)),
@@ -148,10 +140,7 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Raghay',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Raghay', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         centerTitle: true,
         actions: [
           IconButton(
@@ -160,11 +149,7 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
               try {
                 await FirebaseAuth.instance.signOut();
                 if (!context.mounted) return;
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  LoginPage.id,
-                  (route) => false,
-                );
+                Navigator.pushNamedAndRemoveUntil(context, LoginPage.id, (route) => false);
               } catch (e) {
                 showSnackBar(context, 'Error signing out: ${e.toString()}');
               }
@@ -178,14 +163,10 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
         child: const Icon(Icons.chat, color: Colors.white),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection(kMessagesCollection)
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection(kMessagesCollection).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: kPrimaryColor),
-            );
+            return const Center(child: CircularProgressIndicator(color: kPrimaryColor));
           }
 
           if (snapshot.hasData) {
@@ -196,30 +177,20 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
               var data = doc.data() as Map<String, dynamic>;
               String? chatRoomId = data['chatRoomId'];
 
-              if (chatRoomId != null &&
-                  chatRoomId.contains(myEmail.toLowerCase())) {
+              if (chatRoomId != null && chatRoomId.contains(myEmail.toLowerCase())) {
                 if (!uniqueChatRooms.contains(chatRoomId)) {
                   uniqueChatRooms.add(chatRoomId);
 
-                  String receiverEmail = data['id'] == myEmail
-                      ? (data['receiverId'] ?? '')
-                      : (data['id'] ?? '');
-                  String rawReceiverName = data['id'] == myEmail
-                      ? (data['receiverName'] ?? '')
-                      : (data['senderName'] ?? '');
+                  String receiverEmail = data['id'] == myEmail ? (data['receiverId'] ?? '') : (data['id'] ?? '');
+                  String rawReceiverName = data['id'] == myEmail ? (data['receiverName'] ?? '') : (data['senderName'] ?? '');
 
                   // تحديث الكاش إذا وجدنا اسم صحيح
-                  if (rawReceiverName.isNotEmpty &&
-                      !rawReceiverName.contains('@')) {
-                    _cachedUsernames[receiverEmail.toLowerCase()] =
-                        rawReceiverName;
+                  if (rawReceiverName.isNotEmpty && !rawReceiverName.contains('@')) {
+                    _cachedUsernames[receiverEmail.toLowerCase()] = rawReceiverName;
                   }
 
-                  String finalReceiverName =
-                      _cachedUsernames[receiverEmail.toLowerCase()] ??
-                      (rawReceiverName.isNotEmpty
-                          ? rawReceiverName
-                          : receiverEmail.split('@')[0]);
+                  String finalReceiverName = _cachedUsernames[receiverEmail.toLowerCase()] ??
+                      (rawReceiverName.isNotEmpty ? rawReceiverName : receiverEmail.split('@')[0]);
 
                   activeChats.add({
                     'chatRoomId': chatRoomId,
@@ -235,11 +206,8 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(24.0),
-                  child: Text(
-                    'No active chats yet.\nClick the button to start! 🚀',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
+                  child: Text('No active chats yet.\nClick the button to start! 🚀', 
+                    textAlign: TextAlign.center, style: TextStyle(fontSize: 16, color: Colors.grey)),
                 ),
               );
             }
@@ -249,49 +217,24 @@ class _ChatsHubPageState extends State<ChatsHubPage> {
               itemBuilder: (context, index) {
                 var chat = activeChats[index];
                 return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundColor: kPrimaryColor,
-                      child: Text(
-                        chat['receiverName'][0].toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: Text(chat['receiverName'][0].toUpperCase(), 
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                     ),
-                    title: Text(
-                      chat['receiverName'],
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      chat['lastMessage'],
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
+                    title: Text(chat['receiverName'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text(chat['lastMessage'], maxLines: 1, overflow: TextOverflow.ellipsis),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
                     onTap: () {
-                      String senderNameParam = myName.isEmpty
-                          ? myEmail.split('@')[0]
-                          : myName;
-                      Navigator.pushNamed(
-                        context,
-                        ChatPage.id,
-                        arguments: {
-                          'myEmail': myEmail,
-                          'receiverEmail': chat['receiverEmail'],
-                          'receiverName': chat['receiverName'],
-                          'myName': senderNameParam,
-                        },
-                      );
+                      String senderNameParam = myName.isEmpty ? myEmail.split('@')[0] : myName;
+                      Navigator.pushNamed(context, ChatPage.id, arguments: {
+                        'myEmail': myEmail,
+                        'receiverEmail': chat['receiverEmail'],
+                        'receiverName': chat['receiverName'],
+                        'myName': senderNameParam,
+                      });
                     },
                   ),
                 );

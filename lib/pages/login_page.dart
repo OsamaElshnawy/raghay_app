@@ -110,20 +110,12 @@ class _LoginPageState extends State<LoginPage> {
               child: ListView(
                 children: [
                   SizedBox(height: screenHeight * 0.12),
-                  Icon(
-                    Icons.forum,
-                    size: screenHeight * 0.12,
-                    color: Colors.white,
-                  ),
+                  Icon(Icons.forum, size: screenHeight * 0.12, color: Colors.white),
                   const SizedBox(height: 15),
                   const Center(
                     child: Text(
                       'Raghay',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.05),
@@ -131,11 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Login',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -144,12 +132,8 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: false,
                     textInputAction: TextInputAction.next,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Email';
-                      }
-                      if (!value.contains('@')) {
-                        return 'Please Enter Valid Email';
-                      }
+                      if (value == null || value.isEmpty) return 'Please Enter Email';
+                      if (!value.contains('@')) return 'Please Enter Valid Email';
                       return null;
                     },
                     hintText: 'Email',
@@ -161,20 +145,11 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: _isPasswordObscured,
                     textInputAction: TextInputAction.done,
                     suffixIcon: IconButton(
-                      icon: Icon(
-                        _isPasswordObscured
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Colors.white60,
-                      ),
-                      onPressed: () => setState(
-                        () => _isPasswordObscured = !_isPasswordObscured,
-                      ),
+                      icon: Icon(_isPasswordObscured ? Icons.visibility_off : Icons.visibility, color: Colors.white60),
+                      onPressed: () => setState(() => _isPasswordObscured = !_isPasswordObscured),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Password is required.';
-                      }
+                      if (value == null || value.isEmpty) return 'Password is required.';
                       return null;
                     },
                     hintText: 'Password',
@@ -186,15 +161,9 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        "don't have an account? ",
-                        style: TextStyle(color: Colors.white70, fontSize: 16),
-                      ),
+                      const Text("don't have an account? ", style: TextStyle(color: Colors.white70, fontSize: 16)),
                       GestureDetector(
-                        onTap: isLoading
-                            ? null
-                            : () =>
-                                  Navigator.pushNamed(context, RegisterPage.id),
+                        onTap: isLoading ? null : () => Navigator.pushNamed(context, RegisterPage.id),
                         child: Text(
                           'Register',
                           style: TextStyle(

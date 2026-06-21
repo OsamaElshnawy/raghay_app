@@ -1,0 +1,7 @@
+# تجاهل فولدرات المنصات في حساب اللغات
+android/**/* linguist-documentation
+ios/**/* linguist-documentation
+windows/**/* linguist-documentation
+linux/**/* linguist-documentation
+web/**/* linguist-documentation
+macos/**/* linguist-documentation

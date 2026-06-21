@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "803838735327",
+    "project_id": "raghay-1a172",
+    "storage_bucket": "raghay-1a172.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803838735327:android:125a024e4fe50afcb7ca6a",
+        "android_client_info": {
+          "package_name": "com.example.raghay_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803838735327-lo7vgnjt7elsofnu22hat0arvldc3adk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.raghay_app",
+            "certificate_hash": "97b351b793eca995be2e16b3fc9981905162df3d"
+          }
+        },
+        {
+          "client_id": "803838735327-pqoe0sk1htclkd6o8i2gedil8mapp827.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcoCwdR4E5-SzCPMiAJbxq1cGY589sjpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803838735327-pqoe0sk1htclkd6o8i2gedil8mapp827.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "803838735327-ivute1q5o8ads9qoikhcqeia4q841nie.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.raghayApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
